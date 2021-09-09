@@ -1,0 +1,322 @@
+\documentclass[fleqn,10pt]{wlscirep}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lineno}
+\linenumbers
+
+\title{\emph{Skew}DB: A comprehensive database of GC and a dozen other skews for over 28,000 chromosomes and plasmids}
+
+\author[*]{Bert Hubert}
+\affil[*]{corresponding author: Bert Hubert (bert@hubertnet.nl)}
+
+\begin{abstract}
+  GC skew denotes the relative excess of G nucleotides over C nucleotides on the leading versus the lagging replication strand of eubacteria. While the effect is small, typically around 2.5\%, it is robust and pervasive. GC skew and the analogous TA skew are a localized deviation from Chargaff's second parity rule, which states that G and C, and T and A occur with (mostly) equal frequency even within a strand.
+
+  Most bacteria also show the analogous TA skew. Different phyla show different kinds of skew and differing relations between TA and GC skew.
+
+  This article introduces an open access database (\url{https://skewdb.org}) of GC and 12 other skews for over 28,000 chromosomes and plasmids. Many other details like codon bias, strand bias, strand lengths and taxonomic data are also included. The \emph{Skew}DB database can be used to generate or verify hypotheses. Since the origins of both the second parity rule, as well as GC skew itself, are not yet satisfactorily explained, such a database may enhance our understanding of microbial DNA.
+
+\end{abstract}
+\begin{document}
+
+\flushbottom
+\maketitle
+\thispagestyle{empty}
+
+\section*{Background \& Summary}
+The phenomenon of GC skew is tantalizing because it enables a simple numerical analysis that accurately predicts the loci of both the origin and terminus of replication in most bacteria \cite{lu_skewit_2020} \cite{luo_doric_2019}.
+
+Bacterial DNA is typically replicated simultaneously on both strands, starting at the origin of replication \cite{ODonnell2013}. Both replication forks travel in the 5' to 3' direction, but given that the replichores are on opposite strands, topologically they are traveling in opposite directions. This continues until the forks meet again at the terminus. This means that roughly one half of every strand is replicated in the opposite direction of the other half. The forward direction is called the leading strand. Many plasmids also replicate in this way \cite{Lilly2015}.
+
+The excess of G over C on the leading strand is in itself only remarkable because of Chargaff's somewhat mysterious second parity rule\cite{rudner_separation_1968}, which states that within a DNA strand, there are nearly equal numbers of G's and C's, and similarly, T's and A's. This rule does not directly follow from the first parity rule, which is a simple statement of base pairing rules.
+
+Depending on who is asked, Chargaff's second parity rule is so trivial that it needs no explanation, or it requires complex mathematics and entropy considerations to explain its existence \cite{fariselli_dna_2020}.
+
+The origins of GC skew are still being debated. The leading and lagging strands of circular bacterial chromosomes are replicated very differently; it is at least plausible that this leads to different mutational biases. In addition, there are selection biases that are theorized to be involved \cite{tillier_contributions_2000}. No single mechanism may be exclusively responsible.
+
+This article does not attempt to explain or further mystify \cite{zhang_brief_2014} the second parity rule or GC skew, but it may be that the contents of the \emph{Skew}DB can contribute to our further understanding.
+
+The \emph{Skew}DB also contains some hard to explain data on many chromosomes. These include highly asymmetric skew, but also very disparate strand lengths. On the positive side, the \emph{Skew}DB confirms earlier work on skews in the Firmicute phylum  \cite{charneski_atypical_2011}, and also expands on these earlier findings.
+
+GC skew has often been investigated by looking at windows of DNA of a certain size. It has been found that this chosen size impacts the results of the analysis. In what follows, I only look at cumulative skew \cite{grigoriev_analyzing_1998}. This sidesteps window size issues. For example, the sequence GGGCCC has a cumulative GC skew of zero. However, as we progress through the sequence, this skew takes on values 0, 1, 2, 3, 2, 1, 0.
+
+The result of such an analysis is shown in figure \ref{fig:explainer-graph}. The analysis software fits a linear model on the skews, where it also compensates for chromosome files sequenced in the non-canonical direction, or where the origin of replication is not at the start of the file.
+
+\section*{Methods}
+The \emph{Skew}DB analysis relies exclusively on the tens of thousands of FASTA and GFF3 files available through the NCBI download service, which covers both GenBank and RefSeq. The database includes bacteria, archaea and their plasmids.
+
+Furthermore, to ease analysis, the NCBI Taxonomy database is sourced and merged so output data can quickly be related to (super)phyla or specific species.
+
+No other data is used, which greately simplifies processing. Data is read directly in the compressed format provided by NCBI. All results are emitted as standard CSV files.
+
+In the first step of the analysis, for each organism the FASTA sequence and the GFF3 annotation file are parsed. Every chromosome in the FASTA file is traversed from beginning to end, while a running total is kept for cumulative GC and TA skew. In addition, within protein coding genes, such totals are also kept separately for these skews on the first, second and third codon position. Furthermore, separate totals are kept for regions which do not code for proteins.
+
+In addition, to enable strand bias measurements, a cumulative count is also maintained of nucleotides that are part of a positive or negative sense gene. The counter is increased for positive sense nucleotides, decreased for negative sense nucleotides, and left alone for non-genic regions. A separate counter is kept for non-genic nucleotides. 
+
+Finally, G and C nucleotides are counted, regardless of if they are part of a gene or not.
+
+These running totals are emitted at 4096 nucleotide intervals, a resolution suitable for detemining skews and shifts.
+
+In addition, one line summaries are stored for each chromosome. These line includes the RefSeq identifier of the chromosome, the full name mentioned in the FASTA file, plus counts of A, C, G and T nucleotides. Finally five levels of taxonomic data are stored.
+
+Chromosomes and plasmids of fewer than 100 thousand nucleotides are ignored, as these are too noisy to model faithfully. Plasmids are clearly marked in the database, enabling researchers to focus on chromosomes if so desired.
+
+\subsection*{Fitting}
+Once the genomes have been summarised at 4096-nucleotide resolution, the skews are fitted to a simple model.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\linewidth]{explainer.pdf}
+\caption{Sample graph showing \emph{Skew}DB data for Lactiplantibacillus plantarum strain LZ95 chromosome}
+\label{fig:explainer-graph}
+\end{figure}
+
+The fits are based on four parameters, as shown in figure \ref{fig:explainer-graph}. {\tt Alpha1} and {\tt alpha2} denote the relative excess of G over C on the leading and lagging strands. If {\tt alpha1} is $0.046$, this means that for every 1000 nucleotides on the leading strand, the cumulative count of G excess increases by 46.
+
+The third parameter is {\tt div} and it describes how the chromosome is divided over leading and lagging strands. If this number is $0.557$, the leading replication strand is modeled to make up $55.7\%$ of the chromosome.
+
+The final parameter is {\tt shift} (the dotted vertical line), and denotes the offset of the origin of replication compared to the DNA FASTA file. This parameter has no biological meaning, and is an artifact of the DNA assembly process. 
+
+The goodness-of-fit number consists of the root mean squared error of the fit, divided by the absolute mean skew. This latter correction is made to not penalize good fits for bacteria showing significant skew.
+
+The main GC skew tends to be defined very strongly, not all chromosomes feature a clear TA skew. The GC skew is therefore used to pick the {\tt div} and {\tt shift} parameters, which are then kept as a fixed constraint for all the other skews.
+
+The fitting process itself is a simplex (Amoeba) optimization over the three dimensions, seeded with the average observed skew over the whole genome, and assuming there is no shift, and that the leading and lagging strands are evenly distributed. The simplex optimization is tuned that it makes sufficiently large steps that it can reach the optimum even if some initial assumptions are off.
+
+For every chromosome and skew the model parameters are stores, plus the adjusted root mean squared error.
+
+Both for quality assurance and ease of plotting, individual CSV files are generated for each chromosome, again at 4096 nucleotide resolution, but this time containing both the actual counts of skews as well as the fitted result.
+  
+\subsection*{Some sample findings}
+\subsubsection*{GC and TA skews}
+Most bacteria show concordant GC and TA skew, with an excess of G correlating with an excess of T. This does not need to be the case however. Figure \ref{fig:gc-ta-scatter} is a scatterplot that shows the correlation between the skews for various major superphyla. Firmicutes (part of the Terrabacteria group) show clearly discordant skews.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\linewidth]{phylo-histo.png}
+\caption{Scatter graph of 25,000 chromosomes by superphylum, GC skew versus TA skew}
+\label{fig:gc-ta-scatter}
+\end{figure}
+
+
+\subsubsection*{Firmicute prediction}
+In many bacteria, genes tend to concentrate on the leading replication strand. If the codon bias of genes is such that they are relatively rich in one nucleotide, the ``strand bias'' may itself give rise to GC or TA bias. Or in other words, if genes contain a lot of G's and they huddle on the leading strand, that strand will show GC skew. As an hypothesis, we can plot the observed GC and TA skews for all Firmicutes for which we have data.
+
+
+\begin{figure}[ht]
+  \centering
+    \begin{minipage}[b]{0.45\linewidth}
+      \includegraphics[width=\linewidth]{firmi.pdf}
+      \caption{Predicted versus actual GC/TA skew for 4093 Firmicutes}
+      \label{fig:the-big-graph}
+    \end{minipage}
+    \quad
+    \begin{minipage}[b]{0.45\linewidth}
+      \includegraphics[width=\linewidth]{cdif-histo.pdf}
+      \caption{Scatter graph of codon/strand bias versus GC/TA skew for \emph{C. difficile}}
+      \label{fig:cdif-scatter}
+    \end{minipage}
+\end{figure}
+
+
+Mathematically the relation between the codon bias, strand bias and predicted GC skew turns out to be a simple multiplication. In figure \ref{fig:the-big-graph}, the x-axis represents this multiplication. The y-axis represents the GC and TA skew ratio. 
+
+It can clearly be seen that both GC and TA skew correlate strongly with the codon/strand bias product. TA skew goes to zero with the two biases, but GC skew appears to persist even in the absence of such biases.
+
+
+
+Figure \ref{fig:cdif-scatter} shows the situation for an individual chromosome (\emph{C. difficile}), based on overlapping 40960-nucleotide segments. On the x-axis we find the strand bias for these segments, running from entirely negative sense genes to entirely positive sense genes. The skew is meanwhile plotted on the y-axis, and here too we see that TA skew goes to zero in the absence of strand bias, while GC skew persists and clearly has an independent strand-based component.
+
+\subsubsection*{Asymmetric skew}
+The vast majority of chromosomes show similar skews on the leading and the lagging replication strands, something that makes sense given the pairing rules. There are however many chromosomes that have very asymmetric skews, with one strand sometimes showing no skew at all. In figure \ref{fig:asym-skew} four chromosomes are shown that exhibit such behavior. The \emph{Skew}DB lists around 250 chromosomes where one strand shows a GC skew at least 3 times bigger/smaller than the other one.
+
+\begin{figure}[ht]
+  \centering
+  \begin{minipage}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{flat-skew.pdf}
+    \caption{Chromosomes with asymmetric skews}
+    \label{fig:asym-skew}
+  \end{minipage}
+  \quad
+  \begin{minipage}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{strand-div.pdf}
+    \caption{Chromosomes with differing strand lengths}
+    \label{fig:strand-div}
+  \end{minipage}
+\end{figure}
+
+\subsubsection*{Asymmetric strands}
+Bacteria tend to have very equally sized replication strands, which is also an optimum for the duration of replication. It is therefore interesting to observe that GC skew analysis finds many chromosomes where one strand is four times larger than the other strand.  In  figure \ref{fig:strand-div} four such chromosomes are shown. The \emph{Skew}DB lists around 100 chromosomes where one strand is at least three times as large as the other strand.
+
+
+\subsubsection*{Anomalies}
+In many ways, GC skew is like a forensic record of the historical developments in a chromosome. Horizontal gene transfer, inversions, integration of plasmids, excisions can all leave traces. In addition, DNA sequencing or assembly artifacts will also reliably show up in GC graphs.
+
+Figure \ref{fig:anomalous} shows the GC and TA skews for Salmonella enterica subsp. enterica serovar Concord strain AR-0407 (NZ\_CP044177.1), and many things could be going on here. The peaks might correspond to multiple origins of replication, but might also indicate inversions or DNA assembly problems.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\linewidth]{anomalous.pdf}
+\caption{GC and TA skew for Salmonella enterica subsp. enterica serovar Concord strain AR-0407}
+\label{fig:anomalous}
+\end{figure}
+
+
+To find such anomalies, the \emph{Skew}DB viewer (\url{https://skewdb.org/view}) offers various buttons to show random anomalous chromosomes. 
+
+
+
+
+\section*{Data Records}
+The \emph{Skew}DB consists of several CSV files: skplot.csv, results.csv, genomes.csv and codongc.csv.
+In addition, for each chromosome or plasmid, a separate \_fit.csv file is generated, which contains data at 4096-nucleotide resolution.
+
+skplot.csv contains all the 4096-nucleotide resolution data as one big file for all processed chromosomes and plasmids. skfit.csv is almost an intermediate file, but it might have its uses. The parameters are described in table \ref{tab:skplot}.
+\begin{table}[ht]
+\begin{tabular}{|l|l|l|l|}
+\hline
+abspos     & locus in chromosome                       & name      & RefSeq ID                                   \\ \hline
+acounts0-4 & A nucleotide counter                      & ngcount   & Counter of non-coding nucleotides           \\ \hline
+ccounts0-4 & C nucleotide counter                      & pospos    & cumulative sense counter                    \\ \hline
+gcounts0-4 & G nucleotide counter                      & relpos    & relative position within chromosome/plasmid \\ \hline
+tcounts0-4 & T nucleotide counter                      & taskew    & cumulative TA skew                          \\ \hline
+gcskew     & cumulative GC skew                        & taskew0-3 & cumulative TA skew per codon position       \\ \hline
+gcskew0-3  & cumulative GC skew per codon position     & taskewNG  & cumulative TA skew for non-coding regions   \\ \hline
+gcskewNG   & cumulative GC skew for non-coding regions &           &                                             \\ \hline
+\end{tabular}
+\caption{Fields of skplot.csv}
+\label{tab:skplot}
+\end{table}
+
+results.csv meanwhile contains the details of the fits. In this table \ref{tab:skew-table}, all filled out squares exist. The actual fields
+are called alpha1gc, alpha2gc, gcRMS, alpha1ta, alpha2ta etc. Shift and div are specified, and they come from the GC skew.
+gc0-2, ta0-2 refers to codon position. gcng and tang refer to the non-coding region skews. Finally sb denotes the strand bias. 
+
+\begin{table}[ht]
+  \centering
+\begin{tabular}{|l|l|l|l|ll}
+\hline
+     & alpha1 & alpha2 & rms & \multicolumn{1}{l|}{div} & \multicolumn{1}{l|}{shift} \\ \hline
+gc   & X      &  X     &  X  & \multicolumn{1}{l|}{X}   & \multicolumn{1}{l|}{X}     \\ \hline
+ta   & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+gc0  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+gc1  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+gc2  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+ta0  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+ta1  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+ta2  & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+gcng & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+tang & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+sb   & X      &  X     &  X  &                          &                            \\ \cline{1-4}
+\end{tabular}
+\caption{Skew metrics}
+\label{tab:skew-table}
+\end{table}
+
+\section*{Technical Validation}
+This database models the skews of many chromosomes and plasmids. Validation consists of evaluating the goodness-of-fit compared to the directly available numbers.
+
+The \emph{Skew}DB fits skews to a relatively simple model of only three parameters. This prevents overfitting, and this model has proven to be robust in practice. Yet, when doing automated analysis of tens of thousands of chromosomes, mistakes will be made. Also, not all organisms show coherent GC skew.
+
+\begin{figure}[tbhp]
+\centering
+\includegraphics[width=.5\linewidth]{rms-samples.pdf}
+\caption{\emph{Skew}DB fits for 16 equal sized quality categories of bacterial chromosomes}
+\label{fig:rms-samples}
+\end{figure}
+
+
+Figure \ref{fig:rms-samples} shows 16 equal sized quality categories, where it is visually clear that the 88\% best fits are excellent. It is therefore reasonable to filter the database on $RMS_{gc}<0.1067$. Or conversely, it could be said that above this limit interesting anomalous chromosomes can be found. 
+
+The DoriC database \cite{luo_doric_2019} contains precise details of the location of the origin of replication. 2267 sequences appear both in DoriC and in the \emph{Skew}DB. The DoriC origin of replication should roughly be matched by the ``shift'' metric in the \emph{Skew}DB (but see Usage notes). For 90\% of sequences appearing in both databases, there is less than 5\% distance between these two independent metrics.
+
+\section*{Usage Notes}
+The existential limitation of any database like the \emph{Skew}DB is that it does not represent the distribution of organisms found in nature. The sequence and annotation databases are dominated by easily culturable microbes. And even within that selection, specific (model) organisms are heavily oversampled because of their scientific, economic or medical relevance.
+
+Because of this, care should be taken not to interpret numbers in a way that does not take such over- and undersampling into account. This leaves enough room however for finding correlations. Some metrics are sampled so heavily that it would be a miracle if the unculturable organisms were collectively conspiring to skew the statistics away from the average.
+
+Finally it should be noted that the \emph{Skew}DB tries to precisely measure the skew, but it makes no effort to pin down the Origin of repliation exactly. For such uses, please refer to the DoriC database \cite{luo_doric_2019}. In future work, the \emph{Skew}DB will attempt to use OriC motifs to improve fitting of this metric.
+
+On \url{https://skewdb.org} an explanatory Jupyter \cite{Kluyver:2016aa} notebook can be found that uses Matplotlib \cite{Hunter:2007} and Pandas \cite{jeff_reback_2021_5203279} to create all the graphs from this article, and many more. In addition, this notebook reproduces all numerical claims made in this work. 
+
+\section*{Code availability}
+The \emph{Skew}DB is produced using the \href{https://github.eu/berthubert/antonie2}{Antonie DNA processing software}, which is open source. In addition, once the RefSeq and GenBank files have been created and from the NCBI website, the pipeline is fully automated and reproducible. 
+
+A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is available for this article, which includes this reproducible pipeline, plus a script that regenerates all the graphs and numerical claims from this paper. 
+
+\bibliography{references}
+
+
+\section*{Acknowledgements} 
+
+I would like to thank Bertus Beaumont for helping me to think like a biologist, and Jason Piper for regularly pointing me to the relevant literature. In addition, I am grateful that Felix Hol kindly allowed me to field test my software on his DNA sequences \cite{hol_density-dependent_2016}. Twitter users @halvorz and @Suddenly\_a\_goat also provided valuable feedback.
+
+\section*{Author contributions statement}
+
+B.H. did all the work.
+
+\section*{Competing interests}
+The author declares no competing interests.
+
+\section*{Figures \& Tables}
+\newcommand{\comment}[1]{}
+
+\comment{
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{explainer.pdf}
+\caption{Sample graph showing \emph{Skew}DB data for Lactiplantibacillus plantarum strain LZ95 chromosome}
+\label{fig:explainer-graph}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{phylo-histo.png}
+\caption{Scatter graph of 25,000 chromosomes by superphylum, GC skew versus TA skew}
+\label{fig:gc-ta-scatter}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{firmi.pdf}
+\caption{Predicted versus actual GC/TA skew for 4093 Firmicutes}
+\label{fig:the-big-graph}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{cdif-histo.pdf}
+\caption{Scatter graph of codon/strand bias versus GC/TA skew for \emph{C. difficile}}
+\label{fig:cdif-scatter}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{flat-skew.pdf}
+\caption{Chromosomes with asymmetric skews}
+\label{fig:asym-skew}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{strand-div.pdf}
+\caption{Chromosomes with differing strand lengths}
+\label{fig:strand-div}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\linewidth]{anomalous.pdf}
+\caption{GC and TA skew for Salmonella enterica subsp. enterica serovar Concord strain AR-0407}
+\label{fig:anomalous}
+\end{figure}
+
+\begin{figure}[tbhp]
+\centering
+\includegraphics[width=.9\linewidth]{rms-samples.pdf}
+\caption{\emph{Skew}DB fits for 16 equal sized quality categories}
+\label{fig:rms-samples}
+\end{figure}
+}
+
+\end{document}
