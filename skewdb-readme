@@ -1,0 +1,128 @@
+This is an archival copy of the SkewDB.
+
+Details of this database can be found on:
+
+	* https://skewdb.org/
+	* https://berthub.eu/articles/posts/skewdb-an-open-database-of-gc-and-other-microbial-skews/
+	* https://doi.org/10.1101/2021.09.09.459602 ("SkewDB: A comprehensive database of GC and 10 other skews for over 28,000 chromosomes and plasmids")
+
+In this document you'll find an abstract with a high-level description,
+followed by a per-field description of the files in the distribution.
+
+# Abstract
+
+GC skew denotes the relative excess of G nucleotides over C nucleotides on
+the leading versus the lagging replication strand of eubacteria.  While the
+effect is small, typically around 2.5%, it is robust and pervasive.  GC skew
+and the analogous TA skew are a localized deviation from Chargaff's second
+parity rule, which states that G and C, and T and A occur with (mostly)
+equalfrequency even within a strand.  Most bacteria also show the analogous
+TA skew.  
+
+Different phyla show different kinds of skew and differing relations between
+TA and GC skew.  This article introduces an open access database
+(https://skewdb.org) of GC and 10 other skews for over 28,000 chromosomes
+and plasmids.
+
+Further details like codon bias, strand bias, strand lengths and taxonomic
+data are also included.  The SkewDB database can be used to generate or
+verify hypotheses.  Since the origins of both the second parity rule, as
+well as GC skew itself, are not yet satisfactorily explained, such a
+database may enhance our understanding of microbial DNA.
+
+# Contents
+This distribution contains the following files:
+
+ * gcskewdb.csv: one line per DNA sequence, containing a high-level description of skews and biases, plus phylogenetic data
+ * skplot.csv: raw skew data for all DNA sequences, at 4096-nucleotide intervals
+ * ...fit.csv: one file per DNA sequence, containing the data from skplot.csv, but also plotted fits of all the skews
+
+
+gcskewdb has the following defined fields:
+
+name		Name of DNA sequence (symbolic, like NC_123234.1)
+fullname	Full name of sequence, often including strain. Sourced from FASTA
+a/c/g/tcount	Number of 'A/C/G/T' nucleotides in sequence
+plasmid		Set to 1 if this is a plasmid
+realm1/2/3/4/5	Phylogenetic information at 5 levels	
+protgenecount	Total nucleotides found in coding regions
+stopTAG		Number of stop codons that are TAG
+stopTAA		Number of stop codons that are TAA
+stopTGA		Number of stop codons that are TGA
+stopXXX		Number of stop codons that are something else
+startATG	Number of start codons that are ATG	
+startGTG	Number of start codons that are GTG	
+startTTG	Number of start codons that are TTG	
+startXXX	Number of start codons that are something else
+dnaApos		Locus of the dnaA gene in the DNA sequence, -1 if not found
+dnaAsense	Sense of the dnaA gene
+siz		Size of DNA sequence in nucleotides
+gccount		Equal to gcount+ccount
+ngcount		Number of nucleotides outside of protein coding regions
+a/c/g/tcounts2	Number of A/C/G/T nucleotides in the final codon position
+alpha1gc	GC excess ratio per nucleotide, leading strand
+alpha2gc	CG excess ratio per nucleotide, lagging strand
+shift		Position in DNA sequence there the leading strand starts
+div		Relative length of the leading strand versus genome length
+alpha1/2ta	AT/TA excess ratio per nucleotide, leading/lagging trand
+alpha1/2sb	Excess ratio of coding nucleotides, leading/lagging strand
+alpha1gc0/1/2	Excess ratio of GC on 1st, 2nd, 3rd codon positions, leading strand
+alpha2gc0/2/2	Excess ratio of CG on 1st, 2nd, 3rd codon positions, lagging strand
+alpha1ta0/1/2	Excess ratio of TA on 1st, 2nd, 3rd codon positions, leading strand
+alpha2ta0/2/2	Excess ratio of AT on 1st, 2nd, 3rd codon positions, lagging strand
+alpha1gcNG	Excess ratio of GC on non-protein coding nucleotides, leading strand
+alpha2gcNG	Excess ratio of CG on non-protein coding nucleotides, lagging strand
+alpha1taNG	Excess ratio of TA on non-protein coding nucleotides, lagging strand
+alpha2taNG	Excess ratio of AT on non-protein coding nucleotides, lagging strand
+rmsGC,TA,SB	Root mean squared error of fits	
+rmsGC0/1/2	Root mean squared error of fits	
+rmsTA0/1/2	Root mean squared error of fits	
+rmsGC/TANG	Root mean squared error of fits	
+gccontent	GC% of DNA sequence - equal to (gcount+ccount)/siz
+a/c/g/tfrac	Fraction of nucleotides that are A, C, G or T
+leada/c/g/tfrac	Fraction of leading strand coding nucleotides that are A, C, G or T
+laga/c/g/tfrac  Fraction of lagging strand coding nucleotides that are A, C, G or T	
+
+For historical reasons some other fields are also present, these should not
+be used until they are defined here.
+
+The raw, unmodelled, skews are available in skplot.csv, at 4096 nucleotide
+resolution, with the following fields:
+
+name		Name of this DNA sequence
+relpos		Relative position in sequence
+abspos		Absolute position in sequence
+gc/taskew	Cumulative GC/TA skews, in raw nucleotides
+gcskew0/1/2	Cumulative GC skew on 1st, 2nd and 3rd codon positions of coding nucleotides	
+gcskewNG	Cumulative GC skew on non-protein coding nucleotides
+taskew0/1/2	Cumulative TA skew on 1st, 2nd and 3rd codon positions of coding nucleotides	
+taskewNG	Cumulative TA skew on non-protein coding nucleotides
+pospos		Cumulative excess of positive sense genes (for strand bias)	
+gccount		Cumulative count of GC nucleotides
+ngcount		Cumulative count of non-protein coding nucleotires
+a/c/g/tcounts0	Counts of A/C/G/T nucleotides on first codon position of protein coding nucleotides
+a/c/g/tcounts1	Counts of A/C/G/T nucleotides on second codon position of protein coding nucleotides
+a/c/g/tcounts2	Counts of A/C/G/T nucleotides on third codon position of protein coding nucleotides
+
+Per DNA sequence, there is a fit.csv file. Its name corresponds to the 'name' field in gcskewdb.csv file.
+The .fit csv files contain the following fields:
+
+pos		Position in genome (as relative to the FASTA). Data is provided at 4096 nucleotide intervals.	
+gcskew		Cumulative GC skew up to this point	
+predgcskew	Predicted cumulative GC skew based on the fit, up to this point	
+taskew		Same, but for TA
+predtaskew	Same, but for TA
+sbskew		Same, but for Strand Bias
+predsbskew	Same, but for Strand Bias
+gc0/1/2skew	Same but for GC skew on 0/1/2 codon position
+predgc0/1/2skew	Same but for GC skew on 0/1/2 codon position
+ta0/1/2skew	Same but for TA skew on 0/1/2 codon position
+predta0/1/2skew	Same but for TA skew on 0/1/2 codon position
+gcNGskew	Same but for GC skew non non-protein coding nucleotides
+predgcNGskew	Same but for GC skew non non-protein coding nucleotides
+taNGskew	Same but for TA skew non non-protein coding nucleotides
+predtaNGskew	Same but for TA skew non non-protein coding nucleotides
+predleading	Set to 1 if this position (locus) is modelled to be on the leading strand
+
+
+
