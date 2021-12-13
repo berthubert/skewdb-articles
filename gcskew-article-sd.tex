@@ -6,7 +6,8 @@
 \usepackage{graphicx}
 \linenumbers
 
-\title{\emph{Skew}DB: A comprehensive database of GC and 10 other skews for over 28,000 chromosomes and plasmids}
+\title{\emph{Skew}DB: A comprehensive database of GC and 10 other skews for over 30,000 chromosomes and plasmids}
+% CHANGE: New title, now 30,000
 
 \author[*]{Bert Hubert}
 \affil[*]{corresponding author: Bert Hubert (bert@hubertnet.nl)}
@@ -16,7 +17,8 @@
 
   Different bacterial phyla show different kinds of skew, and differing relations between TA and GC skew.
 
-  This article introduces an open access database (\url{https://skewdb.org}) of GC and 10 other skews for over 28,000 chromosomes and plasmids. Further details like codon bias, strand bias, strand lengths and taxonomic data are also included. The \emph{Skew}DB can be used to generate or verify hypotheses. Since the origins of both the second parity rule and GC skew itself are not yet satisfactorily explained, such a database may enhance our understanding of prokaryotic DNA.
+% CHANGE: Update to 30,000  
+  This article introduces an open access database (\url{https://skewdb.org}) of GC and 10 other skews for over 30,000 chromosomes and plasmids. Further details like codon bias, strand bias, strand lengths and taxonomic data are also included. The \emph{Skew}DB can be used to generate or verify hypotheses. Since the origins of both the second parity rule and GC skew itself are not yet satisfactorily explained, such a database may enhance our understanding of prokaryotic DNA.
 \end{abstract}
 \begin{document}
 
@@ -25,7 +27,8 @@
 \thispagestyle{empty}
 
 \section*{Background \& Summary}
-The phenomenon of GC skew is tantalizing because it enables a simple numerical analysis that accurately predicts the loci of both the origin and terminus of replication in most bacteria and some archaea \cite{lu_skewit_2020} \cite{luo_doric_2019}.
+% CHANGE: Added three references that introduce GC skew
+The phenomenon of GC skew\cite{pmid:10570985, Marn2008, Quan2019} is tantalizing because it enables a simple numerical analysis that accurately predicts the loci of both the origin and terminus of replication in most bacteria and some archaea \cite{lu_skewit_2020,luo_doric_2019}.
 
 Bacterial DNA is typically replicated simultaneously on both strands, starting at the origin of replication \cite{ODonnell2013}. Both replication forks travel in the 5' to 3' direction, but given that the replichores are on opposite strands, topologically they are traveling in opposite directions. This continues until the forks meet again at the terminus. This means that roughly one half of every strand is replicated in the opposite direction of the other half. The forward direction is called the leading strand. Many plasmids also replicate in this way \cite{Lilly2015}.
 
@@ -39,9 +42,10 @@ This article does not attempt to explain or further mystify \cite{zhang_brief_20
 
 The \emph{Skew}DB also contains some hard to explain data on many chromosomes. These include highly asymmetric skew, but also very disparate strand lengths. Conversely, the \emph{Skew}DB confirms earlier work on skews in the Firmicute phylum  \cite{charneski_atypical_2011}, and also expands on these earlier findings.
 
-GC skew has often been investigated by looking at windows of DNA of a certain size. It has been found that the choice of window size impacts the results of the analysis. The \emph{SkewDB} is therefore based exclusively on cumulative skew \cite{grigoriev_analyzing_1998}, which sidesteps window size issues. For example, the sequence GGGCCC has a cumulative GC skew of zero, and as we progress through the sequence, this skew takes on values 1, 2, 3, 2, 1, 0.
+% CHANGE: Added the classical GC Skew formula and how it relates to cumulative skew
+GC skew has often been investigated by looking at windows of DNA of a certain size. GC skew is computed as $(G-C)/(G+C)$ in a window of $N$ bases, where $G$ is the number of guanines and $C$ the number of cytosines in that window. It has been found that the choice of window size impacts the results of the analysis. The \emph{SkewDB} is therefore based exclusively on cumulative skew \cite{grigoriev_analyzing_1998}, which sidesteps window size issues. For example, the sequence GGGCCC has a cumulative GC skew of zero, and as we progress through the sequence, this skew takes on values 1, 2, 3, 2, 1, 0. If the window size $N$ is 6, the non-cumulative skew is also 0. 
 
-The result of such an analysis is shown in figure \ref{fig:explainer-graph}. The analysis software fits a linear model on the skews, where it also compensates for chromosome files sequenced in the non-canonical direction, or where the origin of replication is not at the start of the file.
+The result of a cumulative GC skew analysis is shown in figure \ref{fig:explainer-graph}. The analysis software fits a linear model on the skews, where it also compensates for chromosome files sequenced in the non-canonical direction, or where the origin of replication is not at the start of the file.
 
 \section*{Methods}
 The \emph{Skew}DB analysis relies exclusively on the tens of thousands of FASTA and GFF3 files available through the NCBI download service, which covers both GenBank and RefSeq. The database includes bacteria, archaea and their plasmids.
@@ -58,7 +62,8 @@ Finally, G and C nucleotides are counted, regardless of if they are part of a ge
 
 These running totals are emitted at 4096 nucleotide intervals, a resolution suitable for determining skews and shifts.
 
-In addition, one line summaries are stored for each chromosome. These line includes the RefSeq identifier of the chromosome, the full name mentioned in the FASTA file, plus counts of A, C, G and T nucleotides. Finally five levels of taxonomic data are stored.
+% CHANGE: Fixed a typo
+In addition, one line summaries are stored for each chromosome. These lines include the RefSeq identifier of the chromosome, the full name mentioned in the FASTA file, plus counts of A, C, G and T nucleotides. Finally five levels of taxonomic data are stored.
 
 Chromosomes and plasmids of fewer than 100 thousand nucleotides are ignored, as these are too noisy to model faithfully. Plasmids are clearly marked in the database, enabling researchers to focus on chromosomes if so desired.
 
@@ -68,7 +73,8 @@ Once the genomes have been summarised at 4096-nucleotide resolution, the skews a
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.7\linewidth]{explainer.pdf}
-\caption{Sample graph showing \emph{Skew}DB data for Lactiplantibacillus plantarum strain LZ95 chromosome}
+% CHANGE: Added italics
+\caption{Sample graph showing \emph{Skew}DB data for \emph{Lactiplantibacillus plantarum} strain LZ95 chromosome}
 \label{fig:explainer-graph}
 \end{figure}
 
@@ -84,7 +90,8 @@ GC skew tends to be defined very strongly, and it is therefore used to pick the 
 
 The fitting process itself is a downhill simplex method optimization\cite{Nelder1965} over the four dimensions, seeded with the average observed skew over the whole genome, and assuming there is no shift, and that the leading and lagging strands are evenly distributed. To ensure that the globally optimum fit is (very likely) achieved, ten optimization attempts are made from different starting points. This fitting process is remarkably robust in the sense that even significant changes in parameters or fitting strategies cause no appreciable change in the results. 
 
-For every chromosome, plasmid and skew the model parameters are stored, plus the adjusted root mean squared error.
+% CHANGE: Fixed a broken sentence
+For every chromosome and plasmid the model parameters are stored, plus the adjusted root mean squared error.
 
 Both for quality assurance and ease of plotting, individual CSV files are generated for each chromosome, again at 4096 nucleotide resolution, but this time containing both the actual counts of skews as well as the fitted result.
   
@@ -149,19 +156,22 @@ Bacteria tend to have very equally sized replication strands, which is also an o
 
 
 \subsubsection*{Anomalies}
-In many ways, GC skew is like a forensic record of the historical developments in a chromosome. Horizontal gene transfer, inversions, integration of plasmids, excisions can all leave traces. In addition, DNA sequencing or assembly artifacts will also reliably show up in GC graphs.
+% CHANGE: Cite lu_skewit_2020 to acknowledge the origin of the idea of using GC skew to detect mis-assemblies
+In many ways, GC skew is like a forensic record of the historical developments in a chromosome. Horizontal gene transfer, inversions, integration of plasmids, excisions can all leave traces. In addition, DNA sequencing or assembly artifacts will also reliably show up in GC graphs, as elucidated with examples in \cite{lu_skewit_2020}.
 
 Figure \ref{fig:anomalous} shows GC and TA skews for \emph{Salmonella enterica subsp. enterica serovar Concord} strain AR-0407 (NZ\_CP044177.1), and many things could be going on here. The peaks might correspond to multiple origins of replication, but might also indicate inversions or DNA assembly problems.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=.5\linewidth]{anomalous.pdf}
-\caption{GC and TA skew for Salmonella enterica subsp. enterica serovar Concord strain AR-0407}
+% CHANGE: Add italics to species name
+\caption{GC and TA skew for \emph{Salmonella enterica subsp. enterica serovar Concord} strain AR-0407}
 \label{fig:anomalous}
 \end{figure}
 
 \section*{Data Records}
-The \emph{Skew}DB is available through \url{https://skewdb.org}, where it is frequently (\& automatically) refreshed. A snapshot of the data has also been deposited on Dryad as \url{https://doi.org/10.5061/dryad.g4f4qrfr6}.
+% CHANGE: Add proper citation for the dataset and the software
+The \emph{Skew}DB is available through \url{https://skewdb.org}, where it is frequently (\& automatically) refreshed. A snapshot of the data has also been deposited on Dryad\cite{https://doi.org/10.5061/dryad.g4f4qrfr6}.
 
 The \emph{Skew}DB consists of several CSV files: skplot.csv, results.csv, genomes.csv and codongc.csv.
 In addition, for each chromosome or plasmid, a separate \_fit.csv file is generated, which contains data at 4096-nucleotide resolution.
@@ -256,13 +266,14 @@ The \emph{Skew}DB fits skews to a relatively simple model of only four parameter
 \label{fig:rms-samples}
 \end{figure}
 
-Figure \ref{fig:rms-samples} shows 16 equal sized quality categories, where it is visually clear that the 88\% best fits are excellent. It is therefore reasonable to filter the database on $RMS_{gc}<0.1067$. Or conversely, it could be said that above this limit interesting anomalous chromosomes can be found. 
+Figure \ref{fig:rms-samples} shows 16 equal sized quality categories, where it is visually clear that the 88\% best fits are excellent. It is therefore reasonable to filter the database on $RMS_{gc}<0.16$. Or conversely, it could be said that above this limit interesting anomalous chromosomes can be found. 
 
 The DoriC database \cite{luo_doric_2019} contains precise details of the location of the origin of replication. 2267 sequences appear both in DoriC and in the \emph{Skew}DB. The DoriC origin of replication should roughly be matched by the ``shift'' metric in the \emph{Skew}DB (but see Usage notes). For 90\% of sequences appearing in both databases, there is less than 5\% relative chromosome distance between these two independent metrics. This is encouraging since these two numbers do not quite measure the same thing.
 
 On a similar note, the DnaA gene is typically (but not necessarily) located near the origin of replication. For over 80\% of chromosomes, DnaA is found within 5\% of the \emph{Skew}DB ``shift'' metric. This too is an encouraging independent confirmation of the accuracy of the data.
 
 Finally, during processing numbers are kept of the start and stop codons encountered on all protein coding genes on all chromosomes and plasmids. These numbers are interesting in themselves (because they correlate with GC content, for example), but they also match published frequencies, and show limited numbers of non-canonical start codons, and around 0.005\% anomalous stop codons. This too confirms that the analyses are based on correct (annotation) assumptions.
+
 
 \section*{Usage Notes}
 The existential limitation of any database like the \emph{Skew}DB is that it does not represent the distribution of organisms found in nature. The sequence and annotation databases are dominated by easily culturable microbes. And even within that selection, specific (model) organisms are heavily oversampled because of their scientific, economic or medical relevance.
@@ -273,153 +284,26 @@ Finally it should be noted that the \emph{Skew}DB tries to precisely measure the
 
 On \url{https://skewdb.org} an explanatory Jupyter \cite{Kluyver:2016aa} notebook can be found that uses Matplotlib \cite{Hunter:2007} and Pandas \cite{jeff_reback_2021_5203279} to create all the graphs from this article, and many more. In addition, this notebook reproduces all numerical claims made in this work. The \emph{Skew}DB website also provides links to informal articles that further explain GC skew, and how it could be used for research.
 
+% CHANGE: This whole section is new.
+\section*{Relation to earlier work}
+GC skew analysis is not new. As noted above, the DoriC database contains related data that is more precise for its stated purpose. The SkewIT database \cite{lu_skewit_2020} similarly provides a metric of skew, and also comes with an online analysis tool.
+
+Other work, like the Comparative Genometrics Database\cite{Roten2002} and the Z Curve Database \cite{Zhang2003} has been foundational, but by dint of their age lack an analysis of the tens of thousands of DNA sequences that have become available since the initial availability of these databases.
+
+\emph{Skew}DB is funded to be updated monthly with the latest sequences from NCBI until 2026.
+
+Other software that calculates GC skew is available, like for example GraphDNA\cite{Thomas2007}, GC Skewing\cite{Grigoriev1998} and GenSkew. The \emph{Skew}DB delivers far more metrics however, also because it involves annotation data in its calculations. For ease of use, \emph{Skew}DB is made available as a ready to use database, as well as in software form that reproduces this database exactly.
 
 \section*{Code availability}
-The \emph{Skew}DB is produced using the \href{https://github.eu/berthubert/antonie2}{Antonie DNA processing software}, which is open source. In addition, once the RefSeq and GenBank files have been created and from the NCBI website, the pipeline is fully automated and reproducible. The software has also been deposited with Zenodo as \url{https://doi.org/10.5281/zenodo.5516524}.
+The \emph{Skew}DB is produced using the \href{https://github.com/berthubert/antonie2}{Antonie DNA processing software}, which is open source. In addition, once the RefSeq and GenBank files have been created and from the NCBI website, the pipeline is fully automated and reproducible. The software has also been deposited with Zenodo\cite{https://doi.org/10.5281/zenodo.5516524}.
 
 A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is available for this article, which includes this reproducible pipeline, plus a script that regenerates all the graphs and numerical claims from this paper. 
 
-\begin{thebibliography}{10}
-\urlstyle{rm}
-\expandafter\ifx\csname url\endcsname\relax
-  \def\url#1{\texttt{#1}}\fi
-\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
-\expandafter\ifx\csname doiprefix\endcsname\relax\def\doiprefix{DOI: }\fi
-\providecommand{\bibinfo}[2]{#2}
-\providecommand{\eprint}[2][]{\url{#2}}
-
-\bibitem{lu_skewit_2020}
-\bibinfo{author}{Lu, J.} \& \bibinfo{author}{Salzberg, S.~L.}
-\newblock \bibinfo{journal}{\bibinfo{title}{{SkewIT}: {The} {Skew} {Index}
-  {Test} for large-scale {GC} {Skew} analysis of bacterial genomes}}.
-\newblock {\emph{\JournalTitle{PLOS Computational Biology}}}
-  \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{e1008439},
-  \url{10.1371/journal.pcbi.1008439} (\bibinfo{year}{2020}).
-
-\bibitem{luo_doric_2019}
-\bibinfo{author}{Luo, H.} \& \bibinfo{author}{Gao, F.}
-\newblock \bibinfo{journal}{\bibinfo{title}{{DoriC} 10.0: an updated database
-  of replication origins in prokaryotic genomes including chromosomes and
-  plasmids}}.
-\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
-  \textbf{\bibinfo{volume}{47}}, \bibinfo{pages}{D74--D77},
-  \url{10.1093/nar/gky1014} (\bibinfo{year}{2019}).
-
-\bibitem{ODonnell2013}
-\bibinfo{author}{O{\textquotesingle}Donnell, M.}, \bibinfo{author}{Langston,
-  L.} \& \bibinfo{author}{Stillman, B.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Principles and concepts of {DNA}
-  replication in bacteria, archaea, and eukarya}}.
-\newblock {\emph{\JournalTitle{Cold Spring Harbor Perspectives in Biology}}}
-  \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{a010108--a010108},
-  \url{10.1101/cshperspect.a010108} (\bibinfo{year}{2013}).
-
-\bibitem{Lilly2015}
-\bibinfo{author}{Lilly, J.} \& \bibinfo{author}{Camps, M.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Mechanisms of theta plasmid
-  replication}}.
-\newblock {\emph{\JournalTitle{Microbiology Spectrum}}}
-  \textbf{\bibinfo{volume}{3}}, \url{10.1128/microbiolspec.plas-0029-2014}
-  (\bibinfo{year}{2015}).
-
-\bibitem{rudner_separation_1968}
-\bibinfo{author}{Rudner, R.}, \bibinfo{author}{Karkas, J.~D.} \&
-  \bibinfo{author}{Chargaff, E.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Separation of {B}. subtilis {DNA}
-  into complementary strands. 3. {Direct} analysis.}}
-\newblock {\emph{\JournalTitle{Proceedings of the National Academy of
-  Sciences}}} \textbf{\bibinfo{volume}{60}}, \bibinfo{pages}{921--922},
-  \url{10.1073/pnas.60.3.921} (\bibinfo{year}{1968}).
-
-\bibitem{fariselli_dna_2020}
-\bibinfo{author}{Fariselli, P.}, \bibinfo{author}{Taccioli, C.},
-  \bibinfo{author}{Pagani, L.} \& \bibinfo{author}{Maritan, A.}
-\newblock \bibinfo{journal}{\bibinfo{title}{{DNA} sequence symmetries from
-  randomness: the origin of the {Chargaff}’s second parity rule}}.
-\newblock {\emph{\JournalTitle{Briefings in Bioinformatics}}}
-  \bibinfo{pages}{bbaa041}, \url{10.1093/bib/bbaa041} (\bibinfo{year}{2020}).
-
-\bibitem{tillier_contributions_2000}
-\bibinfo{author}{Tillier, E.~R.} \& \bibinfo{author}{Collins, R.~A.}
-\newblock \bibinfo{journal}{\bibinfo{title}{The {Contributions} of
-  {Replication} {Orientation}, {Gene} {Direction}, and {Signal} {Sequences} to
-  {Base}-{Composition} {Asymmetries} in {Bacterial} {Genomes}}}.
-\newblock {\emph{\JournalTitle{Journal of Molecular Evolution}}}
-  \textbf{\bibinfo{volume}{50}}, \bibinfo{pages}{249--257},
-  \url{10.1007/s002399910029} (\bibinfo{year}{2000}).
-
-\bibitem{zhang_brief_2014}
-\bibinfo{author}{Zhang, R.} \& \bibinfo{author}{Zhang, C.-T.}
-\newblock \bibinfo{journal}{\bibinfo{title}{A {Brief} {Review}: {The} {Z}-curve
-  {Theory} and its {Application} in {Genome} {Analysis}}}.
-\newblock {\emph{\JournalTitle{Current genomics}}}
-  \textbf{\bibinfo{volume}{15}}, \bibinfo{pages}{78--94},
-  \url{10.2174/1389202915999140328162433} (\bibinfo{year}{2014}).
-\newblock \bibinfo{note}{Publisher: Bentham Science Publishers}.
-
-\bibitem{charneski_atypical_2011}
-\bibinfo{author}{Charneski, C.~A.}, \bibinfo{author}{Honti, F.},
-  \bibinfo{author}{Bryant, J.~M.}, \bibinfo{author}{Hurst, L.~D.} \&
-  \bibinfo{author}{Feil, E.~J.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Atypical {AT} {Skew} in {Firmicute}
-  {Genomes} {Results} from {Selection} and {Not} from {Mutation}}}.
-\newblock {\emph{\JournalTitle{PLOS Genetics}}} \textbf{\bibinfo{volume}{7}},
-  \bibinfo{pages}{e1002283}, \url{10.1371/journal.pgen.1002283}
-  (\bibinfo{year}{2011}).
-
-\bibitem{grigoriev_analyzing_1998}
-\bibinfo{author}{Grigoriev, A.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Analyzing genomes with cumulative
-  skew diagrams}}.
-\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
-  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{2286--2290},
-  \url{10.1093/nar/26.10.2286} (\bibinfo{year}{1998}).
-
-\bibitem{Nelder1965}
-\bibinfo{author}{Nelder, J.~A.} \& \bibinfo{author}{Mead, R.}
-\newblock \bibinfo{journal}{\bibinfo{title}{A simplex method for function
-  minimization}}.
-\newblock {\emph{\JournalTitle{The Computer Journal}}}
-  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{308--313},
-  \url{10.1093/comjnl/7.4.308} (\bibinfo{year}{1965}).
-
-\bibitem{Kluyver:2016aa}
-\bibinfo{author}{Kluyver, T.} \emph{et~al.}
-\newblock \bibinfo{title}{Jupyter notebooks -- a publishing format for
-  reproducible computational workflows}.
-\newblock In \bibinfo{editor}{Loizides, F.} \& \bibinfo{editor}{Schmidt, B.}
-  (eds.) \emph{\bibinfo{booktitle}{Positioning and Power in Academic
-  Publishing: Players, Agents and Agendas}}, \bibinfo{pages}{87 -- 90}
-  (\bibinfo{organization}{IOS Press}, \bibinfo{year}{2016}).
-
-\bibitem{Hunter:2007}
-\bibinfo{author}{Hunter, J.~D.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Matplotlib: A 2d graphics
-  environment}}.
-\newblock {\emph{\JournalTitle{Computing in Science \& Engineering}}}
-  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{90--95},
-  \url{10.1109/MCSE.2007.55} (\bibinfo{year}{2007}).
-
-\bibitem{jeff_reback_2021_5203279}
-\bibinfo{author}{Reback, J.} \emph{et~al.}
-\newblock \bibinfo{title}{pandas-dev/pandas: Pandas 1.3.2},
-  \url{10.5281/zenodo.5203279} (\bibinfo{year}{2021}).
-
-\bibitem{hol_density-dependent_2016}
-\bibinfo{author}{Hol, F. J.~H.}, \bibinfo{author}{Hubert, B.},
-  \bibinfo{author}{Dekker, C.} \& \bibinfo{author}{Keymer, J.~E.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Density-dependent adaptive
-  resistance allows swimming bacteria to colonize an antibiotic gradient}}.
-\newblock {\emph{\JournalTitle{The ISME Journal}}}
-  \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{30--38},
-  \url{10.1038/ismej.2015.107} (\bibinfo{year}{2016}).
-
-\end{thebibliography}
-
+\bibliography{references}
 
 \section*{Acknowledgements} 
 
-I would like to thank Bertus Beaumont for helping me to think like a biologist, and Jason Piper for regularly pointing me to the relevant literature. In addition, I am grateful that Felix Hol kindly allowed me to field test my software on his DNA sequences \cite{hol_density-dependent_2016}. Twitter users @halvorz and @Suddenly\_a\_goat also provided valuable feedback.
+I would like to thank Bertus Beaumont for helping me to think like a biologist, and Jason Piper for regularly pointing me to the relevant literature. In addition, I am grateful that Felix Hol kindly allowed me to field test my software on his DNA sequences \cite{hol_density-dependent_2016}. Twitter users $@$halvorz and $@$Suddenly\_a\_goat also provided valuable feedback.
 
 \section*{Author contributions statement}
 
@@ -432,61 +316,6 @@ The author declares no competing interests.
 \newcommand{\comment}[1]{}
 
 \comment{
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{explainer.pdf}
-\caption{Sample graph showing \emph{Skew}DB data for Lactiplantibacillus plantarum strain LZ95 chromosome}
-\label{fig:explainer-graph}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{phylo-histo-lzw.tiff}
-\caption{Scatter graph of 25,000 chromosomes by superphylum, GC skew versus TA skew}
-\label{fig:gc-ta-scatter}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{firmi.pdf}
-\caption{Predicted versus actual GC/TA skew for 4093 Firmicutes}
-\label{fig:the-big-graph}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{cdif-histo.pdf}
-\caption{Scatter graph of codon/strand bias versus GC/TA skew for \emph{C. difficile}}
-\label{fig:cdif-scatter}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{flat-skew.pdf}
-\caption{Chromosomes with asymmetric skews}
-\label{fig:asym-skew}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{strand-div.pdf}
-\caption{Chromosomes with differing strand lengths}
-\label{fig:strand-div}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\linewidth]{anomalous.pdf}
-\caption{GC and TA skew for Salmonella enterica subsp. enterica serovar Concord strain AR-0407}
-\label{fig:anomalous}
-\end{figure}
-
-\begin{figure}[tbhp]
-\centering
-\includegraphics[width=.9\linewidth]{rms-samples.pdf}
-\caption{\emph{Skew}DB fits for 16 equal sized quality categories}
-\label{fig:rms-samples}
-\end{figure}
 }
 
 \end{document}
