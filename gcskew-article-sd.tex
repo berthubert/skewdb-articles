@@ -47,6 +47,14 @@ GC skew has often been investigated by looking at windows of DNA of a certain si
 
 The result of a cumulative GC skew analysis is shown in figure \ref{fig:explainer-graph}. The analysis software fits a linear model on the skews, where it also compensates for chromosome files sequenced in the non-canonical direction, or where the origin of replication is not at the start of the file.
 
+GC skew analysis is not new. As noted below, the DoriC database for example contains related data that is more precise for its stated purpose (finding the Origin of replication). The SkewIT database \cite{lu_skewit_2020} similarly provides a metric of skew, and also comes with an online analysis tool.
+
+Other work, like the Comparative Genometrics Database\cite{Roten2002} and the Z Curve Database \cite{Zhang2003} has been foundational, but by dint of their age lack an analysis of the tens of thousands of DNA sequences that have become available since the initial availability of these databases.
+
+\emph{Skew}DB is funded to be updated monthly with the latest sequences from NCBI until 2026.
+
+Other software that calculates GC skew is available, like for example GraphDNA\cite{Thomas2007}, GC Skewing\cite{Grigoriev1998} and GenSkew. The \emph{Skew}DB delivers far more metrics however, also because it involves annotation data in its calculations. For ease of use, \emph{Skew}DB is made available as a ready to use database, as well as in software form that reproduces this database exactly.
+
 \section*{Methods}
 The \emph{Skew}DB analysis relies exclusively on the tens of thousands of FASTA and GFF3 files available through the NCBI download service, which covers both GenBank and RefSeq. The database includes bacteria, archaea and their plasmids.
 
@@ -284,16 +292,6 @@ Finally it should be noted that the \emph{Skew}DB tries to precisely measure the
 
 On \url{https://skewdb.org} an explanatory Jupyter \cite{Kluyver:2016aa} notebook can be found that uses Matplotlib \cite{Hunter:2007} and Pandas \cite{jeff_reback_2021_5203279} to create all the graphs from this article, and many more. In addition, this notebook reproduces all numerical claims made in this work. The \emph{Skew}DB website also provides links to informal articles that further explain GC skew, and how it could be used for research.
 
-% CHANGE: This whole section is new.
-\section*{Relation to earlier work}
-GC skew analysis is not new. As noted above, the DoriC database contains related data that is more precise for its stated purpose. The SkewIT database \cite{lu_skewit_2020} similarly provides a metric of skew, and also comes with an online analysis tool.
-
-Other work, like the Comparative Genometrics Database\cite{Roten2002} and the Z Curve Database \cite{Zhang2003} has been foundational, but by dint of their age lack an analysis of the tens of thousands of DNA sequences that have become available since the initial availability of these databases.
-
-\emph{Skew}DB is funded to be updated monthly with the latest sequences from NCBI until 2026.
-
-Other software that calculates GC skew is available, like for example GraphDNA\cite{Thomas2007}, GC Skewing\cite{Grigoriev1998} and GenSkew. The \emph{Skew}DB delivers far more metrics however, also because it involves annotation data in its calculations. For ease of use, \emph{Skew}DB is made available as a ready to use database, as well as in software form that reproduces this database exactly.
-
 \section*{Code availability}
 The \emph{Skew}DB is produced using the \href{https://github.com/berthubert/antonie2}{Antonie DNA processing software}, which is open source. In addition the pipeline is fully automated and reproducible, including the retrieval of sequences, annotations and taxonomic data from the NCBI website. The software has also been deposited with Zenodo\cite{https://doi.org/10.5281/zenodo.5516524}.
 
@@ -322,7 +320,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   substitution models incorporating strand bias}}.
 \newblock {\emph{\JournalTitle{Journal of Theoretical Biology}}}
   \textbf{\bibinfo{volume}{253}}, \bibinfo{pages}{508--513},
-  \url{10.1016/j.jtbi.2008.04.004} (\bibinfo{year}{2008}).
+  \url{https://doi.org/10.1016/j.jtbi.2008.04.004} (\bibinfo{year}{2008}).
 
 \bibitem{Quan2019}
 \bibinfo{author}{Quan, C.-L.} \& \bibinfo{author}{Gao, F.}
@@ -331,7 +329,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   bacterial genomes}}.
 \newblock {\emph{\JournalTitle{{FEBS} Letters}}}
   \textbf{\bibinfo{volume}{593}}, \bibinfo{pages}{918--925},
-  \url{10.1002/1873-3468.13374} (\bibinfo{year}{2019}).
+  \url{https://doi.org/10.1002/1873-3468.13374} (\bibinfo{year}{2019}).
 
 \bibitem{lu_skewit_2020}
 \bibinfo{author}{Lu, J.} \& \bibinfo{author}{Salzberg, S.~L.}
@@ -339,7 +337,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   {Test} for large-scale {GC} {Skew} analysis of bacterial genomes}}.
 \newblock {\emph{\JournalTitle{PLOS Computational Biology}}}
   \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{e1008439},
-  \url{10.1371/journal.pcbi.1008439} (\bibinfo{year}{2020}).
+  \url{https://doi.org/10.1371/journal.pcbi.1008439} (\bibinfo{year}{2020}).
 
 \bibitem{luo_doric_2019}
 \bibinfo{author}{Luo, H.} \& \bibinfo{author}{Gao, F.}
@@ -348,7 +346,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   plasmids}}.
 \newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
   \textbf{\bibinfo{volume}{47}}, \bibinfo{pages}{D74--D77},
-  \url{10.1093/nar/gky1014} (\bibinfo{year}{2019}).
+  \url{https://doi.org/10.1093/nar/gky1014} (\bibinfo{year}{2019}).
 
 \bibitem{ODonnell2013}
 \bibinfo{author}{O{\textquotesingle}Donnell, M.}, \bibinfo{author}{Langston,
@@ -357,14 +355,14 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   replication in bacteria, archaea, and eukarya}}.
 \newblock {\emph{\JournalTitle{Cold Spring Harbor Perspectives in Biology}}}
   \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{a010108--a010108},
-  \url{10.1101/cshperspect.a010108} (\bibinfo{year}{2013}).
+  \url{https://doi.org/10.1101/cshperspect.a010108} (\bibinfo{year}{2013}).
 
 \bibitem{Lilly2015}
 \bibinfo{author}{Lilly, J.} \& \bibinfo{author}{Camps, M.}
 \newblock \bibinfo{journal}{\bibinfo{title}{Mechanisms of theta plasmid
   replication}}.
 \newblock {\emph{\JournalTitle{Microbiology Spectrum}}}
-  \textbf{\bibinfo{volume}{3}}, \url{10.1128/microbiolspec.plas-0029-2014}
+  \textbf{\bibinfo{volume}{3}}, \url{https://doi.org/10.1128/microbiolspec.plas-0029-2014}
   (\bibinfo{year}{2015}).
 
 \bibitem{rudner_separation_1968}
@@ -374,7 +372,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   into complementary strands. 3. {Direct} analysis.}}
 \newblock {\emph{\JournalTitle{Proceedings of the National Academy of
   Sciences}}} \textbf{\bibinfo{volume}{60}}, \bibinfo{pages}{921--922},
-  \url{10.1073/pnas.60.3.921} (\bibinfo{year}{1968}).
+  \url{https://doi.org/10.1073/pnas.60.3.921} (\bibinfo{year}{1968}).
 
 \bibitem{fariselli_dna_2020}
 \bibinfo{author}{Fariselli, P.}, \bibinfo{author}{Taccioli, C.},
@@ -382,7 +380,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
 \newblock \bibinfo{journal}{\bibinfo{title}{{DNA} sequence symmetries from
   randomness: the origin of the {Chargaff}’s second parity rule}}.
 \newblock {\emph{\JournalTitle{Briefings in Bioinformatics}}}
-  \bibinfo{pages}{bbaa041}, \url{10.1093/bib/bbaa041} (\bibinfo{year}{2020}).
+  \bibinfo{pages}{bbaa041}, \url{https://doi.org/10.1093/bib/bbaa041} (\bibinfo{year}{2020}).
 
 \bibitem{tillier_contributions_2000}
 \bibinfo{author}{Tillier, E.~R.} \& \bibinfo{author}{Collins, R.~A.}
@@ -391,7 +389,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   {Base}-{Composition} {Asymmetries} in {Bacterial} {Genomes}}}.
 \newblock {\emph{\JournalTitle{Journal of Molecular Evolution}}}
   \textbf{\bibinfo{volume}{50}}, \bibinfo{pages}{249--257},
-  \url{10.1007/s002399910029} (\bibinfo{year}{2000}).
+  \url{https://doi.org/10.1007/s002399910029} (\bibinfo{year}{2000}).
 
 \bibitem{zhang_brief_2014}
 \bibinfo{author}{Zhang, R.} \& \bibinfo{author}{Zhang, C.-T.}
@@ -399,7 +397,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   {Theory} and its {Application} in {Genome} {Analysis}}}.
 \newblock {\emph{\JournalTitle{Current genomics}}}
   \textbf{\bibinfo{volume}{15}}, \bibinfo{pages}{78--94},
-  \url{10.2174/1389202915999140328162433} (\bibinfo{year}{2014}).
+  \url{https://doi.org/10.2174/1389202915999140328162433} (\bibinfo{year}{2014}).
 \newblock \bibinfo{note}{Publisher: Bentham Science Publishers}.
 
 \bibitem{charneski_atypical_2011}
@@ -409,7 +407,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
 \newblock \bibinfo{journal}{\bibinfo{title}{Atypical {AT} {Skew} in {Firmicute}
   {Genomes} {Results} from {Selection} and {Not} from {Mutation}}}.
 \newblock {\emph{\JournalTitle{PLOS Genetics}}} \textbf{\bibinfo{volume}{7}},
-  \bibinfo{pages}{e1002283}, \url{10.1371/journal.pgen.1002283}
+  \bibinfo{pages}{e1002283}, \url{https://doi.org/10.1371/journal.pgen.1002283}
   (\bibinfo{year}{2011}).
 
 \bibitem{grigoriev_analyzing_1998}
@@ -418,7 +416,42 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   skew diagrams}}.
 \newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
   \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{2286--2290},
-  \url{10.1093/nar/26.10.2286} (\bibinfo{year}{1998}).
+  \url{https://doi.org/10.1093/nar/26.10.2286} (\bibinfo{year}{1998}).
+
+\bibitem{Roten2002}
+\bibinfo{author}{Roten, C.-A.~H.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Comparative genometrics ({CG}): a
+  database dedicated to biometric comparisons of whole genomes}}.
+\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
+  \textbf{\bibinfo{volume}{30}}, \bibinfo{pages}{142--144},
+  \url{https://doi.org/10.1093/nar/30.1.142} (\bibinfo{year}{2002}).
+
+\bibitem{Zhang2003}
+\bibinfo{author}{Zhang, C.-T.}, \bibinfo{author}{Zhang, R.} \&
+  \bibinfo{author}{Ou, H.-Y.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The z curve database: a graphic
+  representation of genome sequences}}.
+\newblock {\emph{\JournalTitle{Bioinformatics}}} \textbf{\bibinfo{volume}{19}},
+  \bibinfo{pages}{593--599}, \url{https://doi.org/10.1093/bioinformatics/btg041}
+  (\bibinfo{year}{2003}).
+
+\bibitem{Thomas2007}
+\bibinfo{author}{Thomas, J.~M.}, \bibinfo{author}{Horspool, D.},
+  \bibinfo{author}{Brown, G.}, \bibinfo{author}{Tcherepanov, V.} \&
+  \bibinfo{author}{Upton, C.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{GraphDNA}: a java program for
+  graphical display of {DNA} composition analyses}}.
+\newblock {\emph{\JournalTitle{{BMC} Bioinformatics}}}
+  \textbf{\bibinfo{volume}{8}}, \url{https://doi.org/10.1186/1471-2105-8-21}
+  (\bibinfo{year}{2007}).
+
+\bibitem{Grigoriev1998}
+\bibinfo{author}{Grigoriev, A.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Analyzing genomes with cumulative
+  skew diagrams}}.
+\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
+  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{2286--2290},
+  \url{https://doi.org/10.1093/nar/26.10.2286} (\bibinfo{year}{1998}).
 
 \bibitem{Nelder1965}
 \bibinfo{author}{Nelder, J.~A.} \& \bibinfo{author}{Mead, R.}
@@ -426,13 +459,13 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   minimization}}.
 \newblock {\emph{\JournalTitle{The Computer Journal}}}
   \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{308--313},
-  \url{10.1093/comjnl/7.4.308} (\bibinfo{year}{1965}).
+  \url{https://doi.org/10.1093/comjnl/7.4.308} (\bibinfo{year}{1965}).
 
 \bibitem{https://doi.org/10.5061/dryad.g4f4qrfr6}
 \bibinfo{author}{Hubert, B.}
 \newblock \bibinfo{title}{Skewdb: A comprehensive database of gc and 10 other
   skews for over 28, 000 chromosomes and plasmids},
-  \url{10.5061/DRYAD.G4F4QRFR6} (\bibinfo{year}{2021}).
+  \url{https://doi.org/10.5061/DRYAD.G4F4QRFR6} (\bibinfo{year}{2021}).
 
 \bibitem{Kluyver:2016aa}
 \bibinfo{author}{Kluyver, T.} \emph{et~al.}
@@ -449,53 +482,17 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   environment}}.
 \newblock {\emph{\JournalTitle{Computing in Science \& Engineering}}}
   \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{90--95},
-  \url{10.1109/MCSE.2007.55} (\bibinfo{year}{2007}).
+  \url{https://doi.org/10.1109/MCSE.2007.55} (\bibinfo{year}{2007}).
 
 \bibitem{jeff_reback_2021_5203279}
 \bibinfo{author}{Reback, J.} \emph{et~al.}
 \newblock \bibinfo{title}{pandas-dev/pandas: Pandas 1.3.2},
-  \url{10.5281/zenodo.5203279} (\bibinfo{year}{2021}).
-
-\bibitem{Roten2002}
-\bibinfo{author}{Roten, C.-A.~H.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Comparative genometrics ({CG}): a
-  database dedicated to biometric comparisons of whole genomes}}.
-\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
-  \textbf{\bibinfo{volume}{30}}, \bibinfo{pages}{142--144},
-  \url{10.1093/nar/30.1.142} (\bibinfo{year}{2002}).
-
-\bibitem{Zhang2003}
-\bibinfo{author}{Zhang, C.-T.}, \bibinfo{author}{Zhang, R.} \&
-  \bibinfo{author}{Ou, H.-Y.}
-\newblock \bibinfo{journal}{\bibinfo{title}{The z curve database: a graphic
-  representation of genome sequences}}.
-\newblock {\emph{\JournalTitle{Bioinformatics}}} \textbf{\bibinfo{volume}{19}},
-  \bibinfo{pages}{593--599}, \url{10.1093/bioinformatics/btg041}
-  (\bibinfo{year}{2003}).
-
-\bibitem{Thomas2007}
-\bibinfo{author}{Thomas, J.~M.}, \bibinfo{author}{Horspool, D.},
-  \bibinfo{author}{Brown, G.}, \bibinfo{author}{Tcherepanov, V.} \&
-  \bibinfo{author}{Upton, C.}
-\newblock \bibinfo{journal}{\bibinfo{title}{{GraphDNA}: a java program for
-  graphical display of {DNA} composition analyses}}.
-\newblock {\emph{\JournalTitle{{BMC} Bioinformatics}}}
-  \textbf{\bibinfo{volume}{8}}, \url{10.1186/1471-2105-8-21}
-  (\bibinfo{year}{2007}).
-
-\bibitem{Grigoriev1998}
-\bibinfo{author}{Grigoriev, A.}
-\newblock \bibinfo{journal}{\bibinfo{title}{Analyzing genomes with cumulative
-  skew diagrams}}.
-\newblock {\emph{\JournalTitle{Nucleic Acids Research}}}
-  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{2286--2290},
-  \url{10.1093/nar/26.10.2286} (\bibinfo{year}{1998}).
+  \url{https://doi.org/10.5281/zenodo.5203279} (\bibinfo{year}{2021}).
 
 \bibitem{https://doi.org/10.5281/zenodo.5516524}
-\bibinfo{author}{Hubert, B.}, \bibinfo{author}{Hubert, B.} \&
-  \bibinfo{author}{{Beaumont Lab}}.
+\bibinfo{author}{Hubert, B.} \& \bibinfo{author}{{Beaumont Lab}}.
 \newblock \bibinfo{title}{berthubert/antonie2: Skewversion 1.0},
-  \url{10.5281/ZENODO.5516524} (\bibinfo{year}{2021}).
+  \url{https://doi.org/10.5281/ZENODO.5516524} (\bibinfo{year}{2021}).
 
 \bibitem{hol_density-dependent_2016}
 \bibinfo{author}{Hol, F. J.~H.}, \bibinfo{author}{Hubert, B.},
@@ -504,7 +501,7 @@ A \href{https://github.com/berthubert/skewdb-articles}{GitHub repository} is ava
   resistance allows swimming bacteria to colonize an antibiotic gradient}}.
 \newblock {\emph{\JournalTitle{The ISME Journal}}}
   \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{30--38},
-  \url{10.1038/ismej.2015.107} (\bibinfo{year}{2016}).
+  \url{https://doi.org/10.1038/ismej.2015.107} (\bibinfo{year}{2016}).
 
 \end{thebibliography}
 
