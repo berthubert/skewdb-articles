@@ -6,8 +6,9 @@ Details of this database can be found on:
 	* https://berthub.eu/articles/posts/skewdb-an-open-database-of-gc-and-other-microbial-skews/
 	* https://doi.org/10.1101/2021.09.09.459602 ("SkewDB: A comprehensive database of GC and 10 other skews for over 28,000 chromosomes and plasmids")
 
-In this document you'll find an abstract with a high-level description,
-followed by a per-field description of the files in the distribution.
+In this document you'll find an abstract with a high-level description, an
+explanation of data sources & regeneration details, followed by a per-field
+description of the files in the distribution.
 
 # Abstract
 
@@ -29,6 +30,12 @@ data are also included.  The SkewDB database can be used to generate or
 verify hypotheses.  Since the origins of both the second parity rule, as
 well as GC skew itself, are not yet satisfactorily explained, such a
 database may enhance our understanding of microbial DNA.
+
+# Sources & Regeneration
+As explained more fully in the preprint, all data is sourced from the NCBI
+genome repository. No further data is required. This whole database can be
+recreated using the open source Antonie software and the 'repro.sh' script
+from https://github.com/berthubert/skewdb-articles/blob/master/repro.sh
 
 # Contents
 This distribution contains the following files:

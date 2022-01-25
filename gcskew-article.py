@@ -16,8 +16,10 @@ import math
 import numpy as np
 import seaborn as sb
 import matplotlib.pyplot as plt
+import os
 plt.rcParams['figure.figsize'] = [9.5, 7]
 plt.rcParams['font.size'] = '13'
+plt.rcParams.update({'font.family':'sans-serif'})
 
 #plt.rcParams['figure.figsize'] = [15, 6]
 import datetime
@@ -38,7 +40,7 @@ import statsmodels.formula.api as smf
 
 
 
-prefix="/home/ahu/git/antonie/genomes/ncbi-genomes-2021-08-19/"
+prefix="./antonie2/genomes/auto/"
 #data=pandas.read_csv(prefix+"/skplot.csv")
 #data.describe()
 
@@ -52,13 +54,17 @@ results["gccontent"]=results.gccount/results.siz
 results.describe()
 gennames=pandas.read_csv(prefix+"/genomes.csv", sep=';')
 codongc=pandas.read_csv(prefix+"/codongc.csv", sep=';')
+genehisto=pandas.read_csv(prefix+"/genehisto.csv", sep=',')
 
-
-m=gennames.merge(results, on="name").merge(codongc, on="name")
-m
+m=gennames.merge(results, on="name").merge(codongc, on="name").merge(genehisto, on="name")
 m.to_csv(prefix+"/gcskewdb.csv", float_format='%g')
 print(len(m))
 
+
+noplasmids=m[m.plasmid==0]
+
+# we don't want plamids in these graphs
+m=noplasmids
 
 # In[108]:
 
@@ -109,6 +115,9 @@ plt.hlines([0, fitted.tail(1).gcskew.item()],
            [fitted.pos.max() * m[m.name==chromoname]["div"].item(), 
             fitted.pos.max() * m[m.name==chromoname]["div"].item()])
 
+plt.gca().yaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter('{x:,.0f}'))
+
+
 plt.annotate('alpha1',
             xy=(190000, 1500), xytext=(190000, 1500), xycoords='data')
 
@@ -116,7 +125,6 @@ plt.annotate('alpha2',
             xy=(fitted.tail(1).pos.item() - 420000, fitted.tail(1).gcskew.item()+1400),
              xytext=(fitted.tail(1).pos.item() - 420000, fitted.tail(1).gcskew.item()+1400),
              xycoords='data')
-plt.savefig("test.svg")
 
 
 #plt.annotate("",
@@ -148,7 +156,7 @@ plt.plot(fitted.pos, fitted.gcskew, label="Cumulative GC skew")
 plt.plot(fitted.pos, fitted.predgcskew, label="Fitted GC skew")
 plt.plot(fitted.pos, fitted.taskew, label="Cumulative TA skew")
 plt.plot(fitted.pos, fitted.predtaskew, label="Fitted TA skew")
-
+plt.gca().yaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter('{x:,.0f}'))
 #plt.plot(fitted.pos, fitted.sbskew, label="Cumulative SB skew")
 #plt.plot(fitted.pos, fitted.predsbskew, label="Fitted SB skew")
 
@@ -322,11 +330,14 @@ results[results["div"] < 0.35]
 
 
 # you can pick if you want flat genomes:
-sel=m[(m.rmsGC < 0.035) & (
+
+sel=m[(m.rmsGC < 0.05) & (m["div"] > 0.3) & (m["div"] < 0.7) & (
         ((m["alpha1gc"] < 0.0014) & (m["alpha1gc"] > 0))
     ^
        ((m["alpha2gc"] < 0.0014) & (m["alpha2gc"] > 0))
     ) ]  #  & (m.realm3=="Firmicutes")
+
+
 
 #or unequally distributed ones:
 #sel=m[(m["div"] < 0.2) & (m.rmsGC < 0.002) ]
@@ -350,6 +361,9 @@ for k in names:
 
         #axs[b,a].get_yaxis().set_ticks([])
         axs[b,a].set_title(k) #  + " "+str(1000*results[results.name==k].rmsGC.mean()), 
+        axs[b,a].yaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter('{x:,.0f}'))
+
+
         #axs[b,a].grid()
         a=a+1
         if(a>=d):
@@ -385,6 +399,7 @@ for k in names:
         #axs[b,a].plot(fitted.pos, fitted.predtaskew)
 
         #axs[b,a].get_yaxis().set_ticks([])
+        axs[b,a].yaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter('{x:,.0f}'))        
         axs[b,a].set_title(k) #  + " "+str(1000*results[results.name==k].rmsGC.mean()), 
         #axs[b,a].grid()
         a=a+1
@@ -463,8 +478,10 @@ for lh in leg.legendHandles:
     lh.set_alpha(1)
 plt.grid()
 plt.xlim((0,0.09))
+plt.ylim(-0.12, 0.12)
 plt.savefig("phylo-histo.png", dpi=300)
-
+plt.savefig("phylo-histo.tiff", dpi=300)
+os.system("convert -compress lzw phylo-histo.tiff phylo-histo-lzw.tiff")
 
 # In[118]:
 

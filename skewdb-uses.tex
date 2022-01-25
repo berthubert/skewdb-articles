@@ -31,11 +31,11 @@
 \begin{abstract}
   GC skew \cite{lobry_asymmetric_1996} denotes the relative excess of G nucleotides over C nucleotides on the leading versus the lagging replication strand of eubacteria. While small, typically around 2.5\%, the effect is robust and pervasive, showing up in almost all circular chromosomes. GC skew and the analogous TA skew are a localized deviation from Chargaff's second parity rule \cite{rudner_separation_1968}, which states that G and C, and T and A occur with (mostly) equal frequency even within a strand.
 
-  Unlike archaea, bacteria show very well defined GC skew, often highly stable over the entire leading and lagging strands. The excess of G on the leading strand is on average negated by the excess of C on the lagging strand.
+  Unlike archaea \cite{arakawa_quantitative_2009}, bacteria show very well defined GC skew, often highly stable over the entire leading and lagging strands. The excess of G on the leading strand is on average negated by the excess of C on the lagging strand.
 
   Most bacteria also show the analogous TA skew, although this is often noisier than GC skew, with more local deviations. Different phyla show different relations between TA and GC skew \cite{charneski_atypical_2011}.
 
-  This article introduces a database (\url{https://skewdb.org}) of GC and 12 other skews for over 23,000 chromosomes. Many other details like codon bias, strand bias, strand lengths and taxonomic data are also included. The \emph{Skew}DB database can be used to generate or verify hypotheses. Since the origins of both the second parity rule, as well as GC skew itself, are not yet satisfactorily explained, such a database may enhance our understanding of microbial DNA.
+  This article introduces an open access database (\url{https://skewdb.org}) of GC and 12 other skews for over 23,000 chromosomes. Many other details like codon bias, strand bias, strand lengths and taxonomic data are also included. The \emph{Skew}DB database can be used to generate or verify hypotheses. Since the origins of both the second parity rule, as well as GC skew itself, are not yet satisfactorily explained, such a database may enhance our understanding of microbial DNA.
 
   In this work various interesting chromosomes are highlighted which show asymmetric skews and strands, or other hard to explain phenomena. I also show how GC skew is an interesting forensic tool for studying DNA assembly problems, but also possible chromosome or plasmid mergers, which show up clearly in the graphs generated using the \emph{Skew}DB. 
 \end{abstract}
@@ -77,7 +77,7 @@ The statistical model also captures interesting asymmetries. Although no plausib
 
 To prevent plasmids from skewing the numbers, only chromosomes of 1 million nucleotides or more are included. 
 
-The \emph{Skew}DB software (``Antonie'') is fully open source. The generation of the database requires a few hours of CPU time. More information on the software and how to recreate the database are described in the methods section.
+The \emph{Skew}DB software (``Antonie'') is fully open source, the database itself is fully open access. The generation of the database requires a few hours of CPU time. More information on the software and how to recreate the database are described in the methods section.
 
 \section*{What is in the database}
 The \emph{Skew}DB contains several kinds of data. First for each chromosome there are raw counts of nucleotides, also split out by codon position, coding sense and coding status. These numbers are provided with 4096-nucleotide resolution, as well as whole-chromosome totals. From these counts, detailed graphs can be generated per chromosome.
@@ -137,12 +137,12 @@ It can clearly be seen that both GC and TA skew correlate strongly with the codo
 \begin{figure}[ht]
 \centering
 \includegraphics[width=.9\linewidth]{cdif-histo.pdf}
-\caption{Scatter graph of codon/strand bias versus GC/TA skew for C. difficile}
+\caption{Scatter graph of codon/strand bias versus GC/TA skew for \emph{C. difficile}}
 \label{fig:cdif-scatter}
 \end{figure}
 
 
-Figure \ref{fig:cdif-scatter} shows the situation for an individual chromosome (C. difficile), based on overlapping 40960-nucleotide segments. On the x-axis we find the strand bias for these segments, running from entirely negative sense genes to entirely positive sense genes. The skew is meanwhile plotted on the y-axis, and here too we see that TA skew goes to zero in the absence of strand bias, while GC skew persists and clearly has an independent strand-based component.
+Figure \ref{fig:cdif-scatter} shows the situation for an individual chromosome (\emph{C. difficile}), based on overlapping 40960-nucleotide segments. On the x-axis we find the strand bias for these segments, running from entirely negative sense genes to entirely positive sense genes. The skew is meanwhile plotted on the y-axis, and here too we see that TA skew goes to zero in the absence of strand bias, while GC skew persists and clearly has an independent strand-based component.
 
 \subsection*{Asymmetric skew}
 The vast majority of chromosomes show similar skews on the leading and the lagging replication strands, something that makes sense given the pairing rules. There are however many chromosomes that have very asymmetric skews, with one strand sometimes showing no skew at all. In figure \ref{fig:asym-skew} four chromosomes are shown that exhibit such behavior. The \emph{Skew}DB lists around 250 chromosomes where one strand shows a GC skew at least 3 times bigger/smaller than the other one.
@@ -195,6 +195,7 @@ The \emph{Skew}DB fits skews to a relatively simple model of only three paramete
 
 Figure \ref{fig:rms-samples} shows 16 equal sized quality categories, where it is visually clear that the 88\% best fits are excellent. It is therefore reasonable to filter the database on $RMS_{gc}<0.1067$. Or conversely, above that limit, interesting anomalous chromosomes can be found.
 
+Finally it should be noted that the \emph{Skew}DB tries to precisely measure the skew, but it makes no effort to pin down the Origin of repliation exactly. For such uses, please refer to the DoriC database \cite{luo_doric_2019}.
 \section*{Discussion}
 Chargaff's second parity rule, GC and other skews are still open to further research. Previously, no database was available that covers such a wide variety of skews and genomes.
 
@@ -204,11 +205,11 @@ Nucleotide skews, especially when split out by codon position, coding status and
 
 Specifically, given the abundance of data found in the \emph{Skew}DB, it may be possible to use statistics to constrain the possible origins of the various skews. If GC skew is truly a random process, the resulting distribution of skews can be calculated from first principles and compared to the biological reality.
 
-\matmethods{All software and processes to generate the \emph{Skew}DB are open source. The source code can be found through \url{https://skewdb.org}, where details are also available how to rebuild the database. All annotations and sequences are obtained from the NCBI download service. The software is also described in XXX.}
+\matmethods{All software and processes to generate the \emph{Skew}DB are open source. The source code and the database itself can be found through \url{https://skewdb.org}, where details are also available how to rebuild the database. All annotations and sequences are obtained from the NCBI download service. The bioinformatics of the software are also described in a separate article.}
 
 \showmatmethods{} % Display the Materials and Methods section
 
-\acknow{I would like to thank Bertus Beaumont for helping me to think like a biologist, and Jason Piper for regularly pointing me to the relevant literature. In addition, I am grateful that Felix Hol kindly allowed me to field test my software on his DNA sequences \cite{hol_density-dependent_2016}.}
+\acknow{I would like to thank Bertus Beaumont for helping me to think like a biologist, and Jason Piper for regularly pointing me to the relevant literature. In addition, I am grateful that Felix Hol kindly allowed me to field test my software on his DNA sequences \cite{hol_density-dependent_2016}. Twitter users @halvorz and @Suddenly\_a\_goat also provided valuable feedback.}
 
 \showacknow{} % Display the acknowledgments section
 
